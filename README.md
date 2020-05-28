@@ -2,9 +2,9 @@
 
 Shows if there is an AirPod connected or not
 
-## Requriements
+## Requirements
 
-This widget is dependent on blueutil `brew install blueutil`
+This widget requires blueutil `brew install blueutil`
 
 ## Screenshot
 
