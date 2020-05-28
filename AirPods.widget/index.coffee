@@ -1,4 +1,4 @@
-command: 'python /Users/jjung/UebersichtWidgets/AirPods.widget/bt.py'
+command: 'python AirPods.widget/bt.py'
 
 refreshFrequency: '2s'
 
