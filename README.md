@@ -1,6 +1,6 @@
 # Airpod Connection Status
 
-Shows if there is an AirPod connected or not
+Displays Uebersicht widget if AirPods are connected or not connected.
 
 ## Requirements
 
