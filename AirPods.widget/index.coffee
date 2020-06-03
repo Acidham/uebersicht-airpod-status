@@ -1,4 +1,4 @@
-command: 'python AirPods.widget/bt.py'
+command: 'python3 AirPods.widget/bt.py'
 
 refreshFrequency: '2s'
 
@@ -15,9 +15,9 @@ border:1px solid rgba(#000, .25)
 border-radius:10px
 color: white
 padding: 10px
-font-size: 12pt
+font-size: 11pt
 font-family: Helvetica Neue
-width:240px
+width:250px
 lineheight: 1.6
 
 img
