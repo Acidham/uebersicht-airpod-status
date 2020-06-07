@@ -6,6 +6,8 @@ import plistlib
 import sys
 
 AIRPD_SUBSTRING = "AirPods"  # Substring of AirPod Bluetooth device
+BT_IMG = '<img src = "AirPods.widget/airpod.png">'  # Icon for AirPods connected
+NO_BT_IMG = '<img src="AirPods.widget/noairpod.png">'  # Icon for AirPods disconnected
 
 
 class AirPod:
@@ -89,9 +91,6 @@ def device_strings() -> list:
         devices.append(d_str)
     return devices
 
-
-BT_IMG = '<img src = "AirPods.widget/airpod.png">'
-NO_BT_IMG = '<img src="AirPods.widget/noairpod.png">'
 
 connected_list = device_strings()
 connected = f'<span style="color: grey">{NO_BT_IMG}AirPods not connected</span>'
