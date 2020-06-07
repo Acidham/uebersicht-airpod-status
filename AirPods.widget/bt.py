@@ -5,8 +5,10 @@ import os
 import plistlib
 import sys
 
+AIRPD_SUBSTRING = "AirPods"  # Substring of AirPod Bluetooth device
 
-class AirPod(object):
+
+class AirPod:
     def __init__(self, address: str, name: str, left: str, right: str, case: str):
         self.address = address
         self.name = name
@@ -15,7 +17,7 @@ class AirPod(object):
         self.case = case
 
 
-# for debugging purpose defaults read /Library/Preferences/com.apple.Bluetooth
+# for debugging purpose: defaults read /Library/Preferences/com.apple.Bluetooth
 def airpod_battery_status(device_id: str) -> tuple:
     """
     Get device status with a given address (MAC)
@@ -27,7 +29,7 @@ def airpod_battery_status(device_id: str) -> tuple:
 
     Returns:
 
-        dict: Left/Right battery status
+        tuble: Left/Right/Case battery status
 
     """
     with open("/Library/Preferences/com.apple.Bluetooth.plist", "rb") as f:
@@ -58,7 +60,7 @@ def airpods_connected() -> list:
     for v in jsn:
         name: str = v.get('name')
         address: str = v.get('address')
-        if v.get('connected') and "AirPods" in v.get('name'):
+        if v.get('connected') and AIRPD_SUBSTRING in v.get('name'):
             left, right, case = airpod_battery_status(address)
             ap = AirPod(address, name, left, right, case)
             connected_aps.append(ap)
