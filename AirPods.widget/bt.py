@@ -25,14 +25,10 @@ def airpod_battery_status(device_id: str) -> tuple:
     Get device status with a given address (MAC)
 
     Args:
-
         device_id (str): MAC address of the Device to search
 
-
     Returns:
-
         tuble: Left/Right/Case battery status
-
     """
     with open("/Library/Preferences/com.apple.Bluetooth.plist", "rb") as f:
         pl = plistlib.load(f)
@@ -50,12 +46,10 @@ def airpod_battery_status(device_id: str) -> tuple:
 
 def airpods_connected() -> list:
     """
-    Get Connected Airpods
+    Get list of connected AirPods
 
     Returns:
-
         list: Return AirPod Device Object-list with address, name, left/right battery
-
     """
     jsn = json.loads(os.popen('/usr/local/bin/blueutil --paired --format json').read())
     connected_aps: list = list()
@@ -74,7 +68,6 @@ def device_strings() -> list:
     Generates list of devices incl name and battery status of Airpods
 
     Returns:
-
         list: List of HTML strings
 
     """
