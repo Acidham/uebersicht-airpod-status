@@ -5,9 +5,10 @@ import os
 import plistlib
 import sys
 
-ICON_PATH = "AirPods.widget/"
-NO_BT_IMG = f'<img src="{ICON_PATH}case.png">'  # Icon for AirPods disconnected
-AIRPD_PRODUCT_INDX = {
+AIRPD_SUBSTRING = "AirPods"  # Substring of AirPod Bluetooth device
+BT_IMG = '<img src = "AirPods.widget/airpod.png">'  # Icon for AirPods connected
+NO_BT_IMG = '<img src="AirPods.widget/case.png">'  # Icon for AirPods disconnected
+AIRPD_PRODUCT = {
     8206: "airpodpro",
     8194: "airpod1",
     8207: "airpod2"
@@ -24,7 +25,7 @@ class AirPod:
         self.case = case
         self.product_id = product_id
         self.vendor_id = vendor_id
-        self.product = AIRPD_PRODUCT_INDX.get(self.product_id) if self.product_id in AIRPD_PRODUCT_INDX else "n/a"
+        self.product = AIRPD_PRODUCT.get(self.product_id) if self.product_id in AIRPD_PRODUCT else "n/a"
 
 
 # for debugging purpose: defaults read /Library/Preferences/com.apple.Bluetooth
@@ -66,11 +67,12 @@ def airpods_connected() -> list:
     for v in jsn:
         name: str = v.get('name')
         address: str = v.get('address')
+        # if v.get('connected') and AIRPD_SUBSTRING in v.get('name'):
         if v.get('connected'):
             left, right, case, product_id, vendor_id = airpod_battery_status(address)
             ap = AirPod(address, name, left, right, case, product_id, vendor_id)
             # 76: Apple; 8206: AirPods Pro; 8194: AirPods 1; 8207: AirPods 2
-            if ap.vendor_id == 76 and ap.product_id in AIRPD_PRODUCT_INDX:
+            if ap.vendor_id == 76 and ap.product_id in AIRPD_PRODUCT:
                 connected_aps.append(ap)
     return connected_aps
 
@@ -93,18 +95,13 @@ def get_device_html() -> list:
         name: str = ap.name
         d_str = name
         if left is not "" or right is not "":
-            d_str = f'{name}<img src="{ICON_PATH}{product}.png"><br><span style="font-size: 8pt">{left} {right} {case}</span>'
+            d_str = f'{name}<img src="AirPods.widget/{product}.png"><br><span style="font-size: 8pt">{left} {right} {case}</span>'
         devices.append(d_str)
     return devices
 
 
-def main():
-    connected_list = get_device_html()
-    connected = f'<span style="color: grey">{NO_BT_IMG}AirPods not connected</span>'
-    if len(connected_list) > 0:
-        connected = "<br>".join(connected_list)
-    sys.stdout.write(connected)
-
-
-if __name__ == "__main__":
-    main()
+connected_list = get_device_html()
+connected = f'<span style="color: grey">{NO_BT_IMG}AirPods not connected</span>'
+if len(connected_list) > 0:
+    connected = "<br>".join(connected_list)
+sys.stdout.write(connected)

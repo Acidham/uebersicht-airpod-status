@@ -7,7 +7,7 @@ update: (output, domEl) ->
 
 style: """
 margin:0
-padding:0px
+padding: 0px
 right: 10px
 bottom: 10px
 background:rgba(#000, .40)
@@ -21,9 +21,9 @@ width:250px
 lineheight: 1.6
 
 img
-    height: 20px
-    width: 20px
-    margin-bottom: 0px
+    height: 32px
+    width: 32px
+    margin-top: 2px
     float: right
 
 """
