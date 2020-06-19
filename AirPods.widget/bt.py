@@ -6,7 +6,7 @@ import plistlib
 import sys
 
 ICON_PATH = "AirPods.widget/"
-NO_BT_IMG = f'<img src="{ICON_PATH}case.png">'  # Icon for AirPods disconnected
+NO_BT_IMG = f'<img class="s-img" src="{ICON_PATH}case.png">'  # Icon for AirPods disconnected
 AIRPD_PRODUCT_INDX = {
     8206: "airpodpro",
     8194: "airpod1",
@@ -93,14 +93,17 @@ def get_device_html() -> list:
         name: str = ap.name
         d_str = name
         if left is not "" or right is not "":
-            d_str = f'{name}<img src="{ICON_PATH}{product}.png"><br><span style="font-size: 8pt">{left} {right} {case}</span>'
+            d_str = f"""
+            <img src="{ICON_PATH}{product}.png">
+            <div>{name}</div><span class="s-txt">{left} {right} {case}</span>
+            """
         devices.append(d_str)
     return devices
 
 
 def main():
     connected_list = get_device_html()
-    connected = f'<span style="color: grey">{NO_BT_IMG}AirPods not connected</span>'
+    connected = f'<div class="s-box">{NO_BT_IMG}<div style="color: grey">AirPods not connected</div></div>'
     if len(connected_list) > 0:
         connected = "<br>".join(connected_list)
     sys.stdout.write(connected)
