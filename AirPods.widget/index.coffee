@@ -18,7 +18,7 @@ font-size: 11pt
 font-family: Helvetica Neue
 width: 250px
 lineheight: 1.6
-text-indent: 15px
+text-indent: 9px
 white-space: nowrap
 
 .s-box
@@ -26,7 +26,7 @@ white-space: nowrap
     align-items:center
 
 .s-txt
-    margin-left: 15px
+    margin-left: 9px
     font-size: 8pt
 
 img
