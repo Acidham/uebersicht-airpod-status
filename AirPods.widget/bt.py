@@ -65,11 +65,9 @@ def paired_airpods() -> list:
     Returns:
         list: Return AirPod Device Object-list with address, name, left/right battery
     """
-    cpu = platform.processor()
-    butil = "/usr/local/bin/blueutil" if cpu == "i386" else "/opt/homebrew/Cellar/blueutil/2.8.0/bin/blueutil"
-    cmd = f"{butil} --paired --format json"
+    blueutil = os.popen("which blueutil").read().strip()
+    cmd = f"{blueutil} --paired --format json"
     jsn = json.loads(os.popen(cmd).read())
-    #jsn = json.loads(os.popen('/usr/local/bin/blueutil --paired --format json').read())
     connected_aps: list = list()
     for v in jsn:
         name: str = v.get('name')

@@ -6,6 +6,8 @@ Displays Uebersicht widget if AirPods are connected or not connected.
 
 This widget requires blueutil `brew install blueutil`
 
+Ensure Shell Commands "Load Bash env" is checked in Uebersicht preferences. 
+
 ## For Alfred users
 
 If you are using [AlfredApp](https://www.alfredapp.com/) with Powerpack you can install [Alfred Airpod Connector Workflow](https://github.com/Acidham/alfred-airpod-connector) to connect/disconnect your Airpod devices.
