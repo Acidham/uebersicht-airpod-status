@@ -2,13 +2,13 @@
 
 import json
 import os
-import platform
 import plistlib
 import sys
 
 ICON_PATH = "AirPods.widget/"
 NO_BT_IMG = f'<img class="s-img" src="{ICON_PATH}case.png">'  # Icon for AirPods disconnected
 AIRPD_PRODUCT_INDX = {
+    8202: "airpodmax",
     8206: "airpodpro",
     8194: "airpod1",
     8207: "airpod2"
