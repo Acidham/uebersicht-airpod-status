@@ -28,36 +28,6 @@ class AirPod:
         self.product = AIRPD_PRODUCT_INDX.get(self.product_id) if self.product_id in AIRPD_PRODUCT_INDX else "n/a"
 
 
-# for debugging purpose: defaults read /Library/Preferences/com.apple.Bluetooth
-def airpod_info(device_id: str) -> tuple:
-    """
-    Get device status with a given address (MAC)
-
-    Args:
-        device_id (str): MAC address of the Device to search
-
-    Returns:
-        tuble: Left/Right/Case battery status
-    """
-    with open("/Library/Preferences/com.apple.Bluetooth.plist", "rb") as f:
-        pl = plistlib.load(f)
-    devices: dict = pl.get("DeviceCache")
-    ret: tuple = tuple()
-    for d, v in devices.items():
-        if device_id in d:
-            ret = (
-                d,  # address
-                v.get("Name"),
-                v.get("BatteryPercentLeft"),
-                v.get("BatteryPercentRight"),
-                v.get("BatteryPercentCase"),
-                v.get("ProductID"),
-                v.get("VendorID")
-            )
-            break
-    return ret
-
-
 def paired_airpods() -> list:
     """
     Get list of connected AirPods
@@ -65,18 +35,26 @@ def paired_airpods() -> list:
     Returns:
         list: Return AirPod Device Object-list with address, name, left/right battery
     """
-    blueutil = os.popen("which blueutil").read().strip()
-    cmd = f"{blueutil} --paired --format json"
-    jsn = json.loads(os.popen(cmd).read())
+    jsn: dict = json.loads(os.popen('system_profiler SPBluetoothDataType -json').read())
+    devices: dict = jsn['SPBluetoothDataType'][0]['devices_list']
     connected_aps: list = list()
-    for v in jsn:
-        name: str = v.get('name')
-        address: str = v.get('address')
-        if v.get('connected'):
-            airpod = AirPod(airpod_info(address))
-            # 76: Apple; 8206: AirPods Pro; 8194: AirPods 1; 8207: AirPods 2
-            if airpod.vendor_id == 76 and airpod.product_id in AIRPD_PRODUCT_INDX:
-                connected_aps.append(airpod)
+    for i in devices:
+        for d_name, d_info in i.items():
+            address: str = d_info.get('device_address')
+            if d_info.get('device_connected') == "Yes" and 'device_productID' in d_info:
+                ret = (
+                    address,  # address
+                    d_name,
+                    d_info.get("device_batteryLevelLeft"),
+                    d_info.get("device_batteryLevelRight"),
+                    d_info.get("device_batteryLevelCase"),
+                    int(d_info.get("device_productID"), 16),
+                    int(d_info.get("device_vendorID"), 16)
+                )
+                airpod = AirPod(ret)
+                # 76: Apple; 8206: AirPods Pro; 8194: AirPods 1; 8207: AirPods 2
+                if airpod.vendor_id == 76 and airpod.product_id in AIRPD_PRODUCT_INDX:
+                    connected_aps.append(airpod)
     return connected_aps
 
 
@@ -91,9 +69,9 @@ def get_device_html() -> list:
     airpods: list = paired_airpods()
     devices = list()
     for ap in airpods:
-        left: str = f"L {ap.left}%" if ap.left else ""
-        right: str = f"R {ap.right}%" if ap.right else ""
-        case: str = f"C {ap.case}%" if ap.case else ""
+        left: str = f"L:{ap.left} " if ap.left else ""
+        right: str = f"R:{ap.right} " if ap.right else ""
+        case: str = f"C:{ap.case}" if ap.case else ""
         product: str = f'{ap.product}'
         name: str = ap.name
         d_str = name
