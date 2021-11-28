@@ -2,11 +2,11 @@
 
 Displays Uebersicht widget if AirPods are connected or not connected.
 
-## Requirements
+## Supported Devices
 
-This widget requires blueutil `brew install blueutil`
-
-Ensure Shell Commands `Load Bash env` is checked in Uebersicht preferences and `PATH` env variable is set and contains path to `blueutil`
+* AirPods Pro
+* AirPods Max
+* AirPods 
 
 ## For Alfred users
 
