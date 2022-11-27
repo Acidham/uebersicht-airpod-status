@@ -4,9 +4,10 @@ Displays Uebersicht widget if AirPods are connected or not connected.
 
 ## Supported Devices
 
-* AirPods Pro
+* AirPods Pro 1,2
 * AirPods Max
-* AirPods 
+* AirPods 1,2
+* PowerBeats Pro
 
 ## For Alfred users
 
