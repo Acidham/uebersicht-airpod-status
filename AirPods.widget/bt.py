@@ -6,12 +6,15 @@ import plistlib
 import sys
 
 ICON_PATH = "AirPods.widget/"
+HTML_SPACER = "&nbsp;"
 NO_BT_IMG = f'<img class="s-img" src="{ICON_PATH}case.png">'  # Icon for AirPods disconnected
 AIRPD_PRODUCT_INDX = {
     8202: "airpodmax",
     8206: "airpodpro",
+    8212: "airpodpro2",
     8194: "airpod1",
-    8207: "airpod2"
+    8207: "airpod2",
+    8203: "powerbeatspro"
 }
 
 
@@ -36,12 +39,13 @@ def paired_airpods() -> list:
         list: Return AirPod Device Object-list with address, name, left/right battery
     """
     jsn: dict = json.loads(os.popen('system_profiler SPBluetoothDataType -json').read())
-    devices: dict = jsn['SPBluetoothDataType'][0]['devices_list']
+    bt_data: dict = jsn['SPBluetoothDataType'][0]
+    connected_devices: list = bt_data['device_connected'] if 'device_connected' in bt_data else []
     connected_aps: list = list()
-    for i in devices:
+    for i in connected_devices:
         for d_name, d_info in i.items():
             address: str = d_info.get('device_address')
-            if d_info.get('device_connected') == "Yes" and 'device_productID' in d_info:
+            if 'device_productID' in d_info:
                 ret = (
                     address,  # address
                     d_name,
@@ -66,21 +70,24 @@ def get_device_html() -> list:
         list: List of HTML strings
 
     """
-    airpods: list = paired_airpods()
-    devices = list()
-    for ap in airpods:
-        left: str = f"L:{ap.left} " if ap.left else ""
-        right: str = f"R:{ap.right} " if ap.right else ""
-        case: str = f"C:{ap.case}" if ap.case else ""
-        product: str = f'{ap.product}'
-        name: str = ap.name
-        d_str = name
-        if left != "" or right != "":
-            d_str = f"""
-            <img src="{ICON_PATH}{product}.png">
-            <div>{name}</div><span class="s-txt">{left} {right} {case}</span>
-            """
-        devices.append(d_str)
+    try:
+        airpods: list = paired_airpods()
+        devices = list()
+        for ap in airpods:
+            left: str = f"L {ap.left}{HTML_SPACER}{HTML_SPACER}" if ap.left else ""
+            right: str = f"R {ap.right}{HTML_SPACER}{HTML_SPACER}" if ap.right else ""
+            case: str = f"C {ap.case}" if ap.case else ""
+            product: str = f'{ap.product}'
+            name: str = ap.name
+            d_str = name
+            if left != "" or right != "":
+                d_str = f"""
+                <img src="{ICON_PATH}{product}.png">
+                <div>{name}</div><span class="s-txt">{left} {right} {case}</span>
+                """
+            devices.append(d_str)
+    except:
+        devices = ()
     return devices
 
 
